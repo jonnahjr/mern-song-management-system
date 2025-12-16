@@ -1,0 +1,39 @@
+import express from 'express';
+import cors from 'cors';
+import helmet from 'helmet';
+import morgan from 'morgan';
+import songRoutes from './routes/songs';
+import { errorHandler } from './utils/errorHandler';
+
+const app = express();
+
+// Security middleware
+app.use(helmet());
+
+// CORS
+app.use(cors());
+
+// Logging
+app.use(morgan('combined'));
+
+// Body parsing
+app.use(express.json({ limit: '10mb' }));
+app.use(express.urlencoded({ extended: true }));
+
+// Routes
+app.use('/songs', songRoutes);
+
+// Health check
+app.get('/health', (req, res) => {
+  res.status(200).json({ status: 'OK', message: 'Server is running' });
+});
+
+// 404 handler for unknown routes
+app.use((req, res) => {
+  res.status(404).json({ message: `Route ${req.originalUrl} not found` });
+});
+
+// Error handling middleware (must be last)
+app.use(errorHandler);
+
+export default app;
