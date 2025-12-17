@@ -32,12 +32,16 @@ app.use(express.urlencoded({ extended: true }));
 app.use('/api/songs', songRoutes);
 
 // Root API health route
-app.get('/', (req, res) => {
+app.get('/', (_req, res) => {
   res.json({ status: 'OK', message: 'MERN Song Management API is running 🚀' });
 });
 
-// Health check
-app.get('/healthz', (req, res) => {
+// Health check (support both /health and /healthz)
+app.get('/health', (_req, res) => {
+  res.status(200).json({ status: 'OK' });
+});
+
+app.get('/healthz', (_req, res) => {
   res.status(200).send('OK');
 });
 
