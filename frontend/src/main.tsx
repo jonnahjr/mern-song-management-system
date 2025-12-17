@@ -8,6 +8,7 @@ import App from './app/App.tsx'
 
 const RootApp = () => {
   const theme = useAppSelector((state) => state.theme)
+  console.log("API BASE URL:", import.meta.env.VITE_API_BASE_URL);
   return (
     <ThemeProvider theme={theme}>
       <App />
