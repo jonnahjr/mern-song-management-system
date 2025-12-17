@@ -59,19 +59,15 @@ const SidebarContainer = styled.div<{ isOpen: boolean }>`
   color: white;
   padding: 20px;
   position: fixed;
-  left: ${props => props.isOpen ? '0' : '-250px'};
+  left: ${props => (props.isOpen ? '0' : '-260px')};
   top: 0;
-  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.4);
   transition: left 0.3s ease;
   z-index: 1000;
 
   @media (max-width: 768px) {
     width: 200px;
-    left: ${props => props.isOpen ? '0' : '-200px'};
-  }
-
-  @media (min-width: 769px) {
-    left: 0;
+    left: ${props => (props.isOpen ? '0' : '-220px')};
   }
 `;
 

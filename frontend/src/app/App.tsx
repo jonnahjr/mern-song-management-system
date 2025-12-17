@@ -12,7 +12,7 @@ const App: React.FC = () => {
   const theme = useAppSelector((state) => state.theme);
   const dispatch = useAppDispatch();
   const [activeSection, setActiveSection] = useState('songs');
-  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [sidebarOpen, setSidebarOpen] = useState(true);
 
   const background = theme.mode === 'dark'
     ? 'linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%)'
@@ -49,18 +49,21 @@ const App: React.FC = () => {
 
   return (
     <AppContainer style={{ background }}>
+      <MobileOverlay $show={sidebarOpen} onClick={() => setSidebarOpen(false)} />
       <Sidebar
         activeSection={activeSection}
         setActiveSection={setActiveSection}
         isOpen={sidebarOpen}
         setIsOpen={setSidebarOpen}
       />
-      <MainContent marginLeft={sidebarOpen ? '250px' : '0'}>
+      <MainContent sidebarOpen={sidebarOpen}>
         <AppHeader>
           <HamburgerButton onClick={() => setSidebarOpen(!sidebarOpen)}>
-            ☰
+            <span />
+            <span />
+            <span />
           </HamburgerButton>
-          <HeaderTitle>🎵 MERN Song Management System</HeaderTitle>
+          <HeaderTitle>🎵 Song Manager</HeaderTitle>
           <HeaderSubtitle>Addis Software Test Project</HeaderSubtitle>
           <ToggleButton onClick={() => dispatch(toggleTheme())}>
             {theme.mode === 'light' ? '🌙' : '☀️'}
@@ -80,11 +83,12 @@ const AppContainer = styled.div`
   position: relative;
 `;
 
-const MainContent = styled.div<{ marginLeft: string }>`
-  margin-left: ${props => props.marginLeft};
+const MainContent = styled.div<{ sidebarOpen: boolean }>`
+  transition: margin-left 0.3s ease;
+  margin-left: ${({ sidebarOpen }) => (sidebarOpen ? '250px' : '0')};
 
-  @media (min-width: 769px) {
-    margin-left: 250px;
+  @media (max-width: 768px) {
+    margin-left: 0;
   }
 `;
 
@@ -177,20 +181,28 @@ const HamburgerButton = styled.button`
   left: 20px;
   background: rgba(255, 255, 255, 0.2);
   border: none;
-  border-radius: 4px;
+  border-radius: 10px;
   width: 40px;
   height: 40px;
-  font-size: 20px;
   cursor: pointer;
   transition: background 0.3s ease;
   z-index: 1001;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+
+  span {
+    display: block;
+    width: 18px;
+    height: 2px;
+    border-radius: 999px;
+    background: #ffffff;
+  }
 
   &:hover {
     background: rgba(255, 255, 255, 0.3);
-  }
-
-  @media (min-width: 769px) {
-    display: none;
   }
 `;
 
@@ -209,6 +221,21 @@ const ToggleButton = styled.button`
 
   &:hover {
     background: rgba(255, 255, 255, 0.3);
+  }
+`;
+
+const MobileOverlay = styled.div<{ $show: boolean }>`
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(3px);
+  opacity: ${({ $show }) => ($show ? 1 : 0)};
+  pointer-events: ${({ $show }) => ($show ? 'auto' : 'none')};
+  transition: opacity 0.3s ease;
+  z-index: 900;
+
+  @media (min-width: 769px) {
+    display: none;
   }
 `;
 

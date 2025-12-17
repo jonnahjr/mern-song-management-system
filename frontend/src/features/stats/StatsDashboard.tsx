@@ -3,11 +3,31 @@ import styled from '@emotion/styled';
 import { fetchStatsStart } from '../../redux/slices/statsSlice';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 
+const AnimatedCounter: React.FC<{ value: number; duration?: number }> = ({ value, duration = 1000 }) => {
+  const [displayValue, setDisplayValue] = useState(0);
+
+  useEffect(() => {
+    let startTime: number;
+    const animate = (currentTime: number) => {
+      if (!startTime) startTime = currentTime;
+      const progress = Math.min((currentTime - startTime) / duration, 1);
+      setDisplayValue(Math.floor(progress * value));
+      if (progress < 1) {
+        requestAnimationFrame(animate);
+      }
+    };
+    requestAnimationFrame(animate);
+  }, [value, duration]);
+
+  return <span>{displayValue}</span>;
+};
+
 const StatsDashboard: React.FC = () => {
   const dispatch = useAppDispatch();
   const { stats, loading, error } = useAppSelector((state) => state.stats);
 
   const [mode, setMode] = useState<'genre' | 'artist'>('genre');
+  const [lastUpdated, setLastUpdated] = useState<Date>(new Date());
 
   const maxGenreCount = useMemo(
     () => {
@@ -27,30 +47,44 @@ const StatsDashboard: React.FC = () => {
 
   useEffect(() => {
     dispatch(fetchStatsStart());
+    setLastUpdated(new Date());
   }, [dispatch]);
 
   if (loading) return <LoadingContainer>Loading statistics...</LoadingContainer>;
   if (error) return <ErrorContainer>Error: {error}</ErrorContainer>;
   if (!stats) return <EmptyContainer>No statistics available</EmptyContainer>;
 
+  const handleRefresh = () => {
+    dispatch(fetchStatsStart());
+    setLastUpdated(new Date());
+  };
+
   return (
     <Container>
-      <Title>Statistics Dashboard</Title>
+      <HeaderSection>
+        <Title>📊 Real-Time Statistics Dashboard</Title>
+        <RefreshSection>
+          <RefreshButton onClick={handleRefresh} disabled={loading}>
+            🔄 {loading ? 'Updating...' : 'Refresh'}
+          </RefreshButton>
+          <LastUpdated>Last updated: {lastUpdated.toLocaleTimeString()}</LastUpdated>
+        </RefreshSection>
+      </HeaderSection>
       <StatsGrid>
         <StatCard>
-          <StatValue>{stats.totalSongs}</StatValue>
+          <StatValue><AnimatedCounter value={stats.totalSongs} /></StatValue>
           <StatLabel>Total Songs</StatLabel>
         </StatCard>
         <StatCard>
-          <StatValue>{stats.totalArtists}</StatValue>
+          <StatValue><AnimatedCounter value={stats.totalArtists} /></StatValue>
           <StatLabel>Total Artists</StatLabel>
         </StatCard>
         <StatCard>
-          <StatValue>{stats.totalAlbums}</StatValue>
+          <StatValue><AnimatedCounter value={stats.totalAlbums} /></StatValue>
           <StatLabel>Total Albums</StatLabel>
         </StatCard>
         <StatCard>
-          <StatValue>{stats.totalGenres}</StatValue>
+          <StatValue><AnimatedCounter value={stats.totalGenres} /></StatValue>
           <StatLabel>Total Genres</StatLabel>
         </StatCard>
         <StatCard>
@@ -203,6 +237,46 @@ const Container = styled.div`
   margin: 0 auto;
 `;
 
+const HeaderSection = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+  flex-wrap: wrap;
+  gap: 16px;
+`;
+
+const RefreshSection = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 12px;
+`;
+
+const RefreshButton = styled.button`
+  padding: 8px 16px;
+  background: #1976d2;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background 0.3s ease;
+
+  &:hover:not(:disabled) {
+    background: #1565c0;
+  }
+
+  &:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+  }
+`;
+
+const LastUpdated = styled.div`
+  font-size: 12px;
+  color: ${({ theme }) => (theme.mode === 'dark' ? '#9ca3af' : '#666')};
+`;
+
 const Title = styled.h2`
   text-align: center;
   margin-bottom: 30px;
@@ -331,6 +405,7 @@ const BarFill = styled.div`
   height: 100%;
   border-radius: inherit;
   background: linear-gradient(90deg, #4f46e5, #06b6d4);
+  transition: width 1s ease-out;
 `;
 
 const CountLabel = styled.span`
