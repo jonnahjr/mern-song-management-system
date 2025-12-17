@@ -2,6 +2,20 @@
 
 Full‑stack MERN app for managing songs (CRUD + statistics) with a Dockerized Express/MongoDB backend and a TypeScript React frontend using Redux Toolkit and Redux‑Saga.
 
+### Screenshots
+
+#### Light Mode
+![Light Mode](screenshots/light-mode.png)
+
+#### Dark Mode
+![Dark Mode](screenshots/dark-mode.png)
+
+#### Mobile View
+![Mobile View](screenshots/mobile-view.png)
+
+#### Stats Dashboard
+![Stats Dashboard](screenshots/stats-dashboard.png)
+
 ### Architecture Overview
 
 - **Backend (Node.js, Express, MongoDB, Mongoose)**
