@@ -2,11 +2,13 @@
 FROM node:18-alpine AS builder
 WORKDIR /app
 
-COPY package*.json ./
+# Copy backend package and lockfiles
+COPY backend/package*.json ./
 RUN npm ci
 
-COPY tsconfig.json ./tsconfig.json
-COPY src ./src
+# Copy backend source and tsconfig
+COPY backend/tsconfig.json ./tsconfig.json
+COPY backend/src ./src
 RUN npm run build
 
 # ---- Runtime stage ----

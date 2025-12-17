@@ -42,8 +42,8 @@ const songsSlice = createSlice({
       state.error = action.payload;
     },
 
-    // Add song
-    addSongStart: (state) => {
+    // Add song (payload is used by saga, reducer only updates loading state)
+    addSongStart: (state, _action: PayloadAction<SongFormData>) => {
       state.loading = true;
       state.error = null;
     },
@@ -56,8 +56,8 @@ const songsSlice = createSlice({
       state.error = action.payload;
     },
 
-    // Update song
-    updateSongStart: (state) => {
+    // Update song (payload is used by saga, reducer only updates loading state)
+    updateSongStart: (state, _action: PayloadAction<{ id: string; data: SongFormData }>) => {
       state.loading = true;
       state.error = null;
     },
@@ -73,8 +73,8 @@ const songsSlice = createSlice({
       state.error = action.payload;
     },
 
-    // Delete song
-    deleteSongStart: (state) => {
+    // Delete song (payload is used by saga, reducer only updates loading state)
+    deleteSongStart: (state, _action: PayloadAction<string>) => {
       state.loading = true;
       state.error = null;
     },
