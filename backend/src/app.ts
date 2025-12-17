@@ -29,7 +29,7 @@ app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true }));
 
 // Routes
-app.use('/songs', songRoutes);
+app.use('/api/songs', songRoutes);
 
 // Root API health route
 app.get('/', (req, res) => {

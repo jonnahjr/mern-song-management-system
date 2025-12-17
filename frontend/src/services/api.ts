@@ -52,32 +52,32 @@ class ApiService {
     if (genre) params.genre = genre;
     if (artist) params.artist = artist;
     if (sort) params.sort = sort;
-    const response: AxiosResponse<Song[]> = await this.api.get('/songs', { params });
+    const response: AxiosResponse<Song[]> = await this.api.get('/api/songs', { params });
     return response.data;
   }
 
   async getSongById(id: string): Promise<Song> {
-    const response: AxiosResponse<Song> = await this.api.get(`/songs/${id}`);
+    const response: AxiosResponse<Song> = await this.api.get(`/api/songs/${id}`);
     return response.data;
   }
 
   async createSong(songData: SongFormData): Promise<Song> {
-    const response: AxiosResponse<Song> = await this.api.post('/songs', songData);
+    const response: AxiosResponse<Song> = await this.api.post('/api/songs', songData);
     return response.data;
   }
 
   async updateSong(id: string, songData: SongFormData): Promise<Song> {
-    const response: AxiosResponse<Song> = await this.api.put(`/songs/${id}`, songData);
+    const response: AxiosResponse<Song> = await this.api.put(`/api/songs/${id}`, songData);
     return response.data;
   }
 
   async deleteSong(id: string): Promise<void> {
-    await this.api.delete(`/songs/${id}`);
+    await this.api.delete(`/api/songs/${id}`);
   }
 
   // Stats API
   async getStats(): Promise<Stats> {
-    const response: AxiosResponse<Stats> = await this.api.get('/songs/stats');
+    const response: AxiosResponse<Stats> = await this.api.get('/api/songs/stats');
     return response.data;
   }
 }
