@@ -6,8 +6,9 @@ import { env } from './config/env';
 connectDB();
 
 // Start server
-const server = app.listen(env.port, () => {
-  console.log(`Server running on port ${env.port}`);
+const PORT = process.env.PORT || env.port;
+const server = app.listen(Number(PORT), '0.0.0.0', () => {
+  console.log(`Server running on port ${PORT}`);
 });
 
 // Graceful shutdown

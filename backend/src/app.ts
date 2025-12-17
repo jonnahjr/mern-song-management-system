@@ -24,8 +24,8 @@ app.use(express.urlencoded({ extended: true }));
 app.use('/songs', songRoutes);
 
 // Health check
-app.get('/health', (req, res) => {
-  res.status(200).json({ status: 'OK', message: 'Server is running' });
+app.get('/healthz', (req, res) => {
+  res.status(200).send('OK');
 });
 
 // 404 handler for unknown routes
