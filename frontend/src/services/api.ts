@@ -46,12 +46,13 @@ class ApiService {
   }
 
   // Songs API
-  async getSongs(search?: string, genre?: string, artist?: string, sort?: string): Promise<Song[]> {
+  async getSongs(search?: string, genre?: string, artist?: string, sort?: string, order?: string): Promise<Song[]> {
     const params: any = {};
     if (search) params.search = search;
     if (genre) params.genre = genre;
     if (artist) params.artist = artist;
     if (sort) params.sort = sort;
+    if (order) params.order = order;
     const response: AxiosResponse<Song[]> = await this.api.get('/api/songs', { params });
     return response.data;
   }

@@ -14,7 +14,7 @@ export const createSong = async (payload: SongPayload): Promise<ISong> => {
   return song.save();
 };
 
-export const listSongs = async (genre?: string, search?: string, artist?: string, sort?: string): Promise<ISong[]> => {
+export const listSongs = async (genre?: string, search?: string, artist?: string, sort?: string, order?: string): Promise<ISong[]> => {
   const filter: any = {};
   if (genre) {
     filter.genre = genre;
@@ -31,9 +31,8 @@ export const listSongs = async (genre?: string, search?: string, artist?: string
     ];
   }
   let sortOption: any = { createdAt: -1 };
-  if (sort) {
-    const [field, order] = sort.split(':');
-    sortOption = { [field]: order === 'desc' ? -1 : 1 };
+  if (sort && order) {
+    sortOption = { [sort]: order === 'desc' ? -1 : 1 };
   }
   return Song.find(filter).sort(sortOption);
 };
