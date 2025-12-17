@@ -98,5 +98,21 @@ The app will be available at the Vite dev URL (typically `http://localhost:5173`
 cd frontend
 npm run build
 ```
-This creates a static bundle in `frontend/dist` which you can serve with any static host (Vercel, Netlify, Nginx, etc.).  
+This creates a static bundle in `frontend/dist` which you can serve with any static host (Vercel, Netlify, Render, etc.).
 Set `VITE_API_BASE_URL` in your hosting environment to point to the deployed backend URL.
+
+### Deployment on Render
+
+**Backend Deployment**
+1. Create a new Web Service on Render, connect your GitHub repo.
+2. Set build command: `npm run build`
+3. Set start command: `npm start`
+4. Add environment variable: `MONGODB_URI` with your MongoDB Atlas connection string.
+5. Deploy.
+
+**Frontend Deployment**
+1. Create a new Static Site on Render, connect your GitHub repo.
+2. Set build command: `cd frontend && npm run build`
+3. Set publish directory: `frontend/dist`
+4. Add environment variable: `VITE_API_BASE_URL` with your deployed backend URL.
+5. Deploy.
