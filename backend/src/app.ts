@@ -23,6 +23,11 @@ app.use(express.urlencoded({ extended: true }));
 // Routes
 app.use('/songs', songRoutes);
 
+// Root API health route
+app.get('/', (req, res) => {
+  res.json({ status: 'OK', message: 'MERN Song Management API is running 🚀' });
+});
+
 // Health check
 app.get('/healthz', (req, res) => {
   res.status(200).send('OK');
