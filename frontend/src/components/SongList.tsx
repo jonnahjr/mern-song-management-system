@@ -160,7 +160,7 @@ const Container = styled.div`
 
 const Title = styled.h2`
   margin-bottom: 20px;
-  color: ${({ theme }) => (theme.mode === 'dark' ? '#e5e7eb' : '#333')};
+  color: #333;
 `;
 
 const SearchContainer = styled.div`
@@ -176,7 +176,7 @@ const SearchContainer = styled.div`
 const SearchInput = styled.input`
   flex: 1;
   padding: 12px;
-  border: 1px solid ${({ theme }) => (theme.mode === 'dark' ? '#4b5563' : '#ccc')};
+  border: 1px solid #ccc;
   border-radius: 8px 0 0 8px;
   font-size: 16px;
 

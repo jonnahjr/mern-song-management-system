@@ -1,37 +1,7 @@
 import styled from '@emotion/styled';
-import {
-  space,
-  layout,
-  flexbox,
-  border,
-  color,
-  typography,
-  shadow,
-  SpaceProps,
-  LayoutProps,
-  FlexboxProps,
-  BorderProps,
-  ColorProps,
-  TypographyProps,
-  ShadowProps,
-} from 'styled-system';
 
-type StyledSystemProps = SpaceProps &
-  LayoutProps &
-  FlexboxProps &
-  BorderProps &
-  ColorProps &
-  TypographyProps &
-  ShadowProps;
-
-export const Box = styled.div<StyledSystemProps>`
-  ${space}
-  ${layout}
-  ${flexbox}
-  ${border}
-  ${color}
-  ${typography}
-  ${shadow}
+export const Box = styled.div`
+  /* Basic box component */
 `;
 
 export const Flex = styled(Box)`
@@ -45,17 +15,12 @@ export const Card = styled(Box)`
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
 `;
 
-export const Button = styled.button<StyledSystemProps>`
+export const Button = styled.button`
   border: none;
   border-radius: 6px;
   padding: 10px 16px;
   font-weight: 600;
   cursor: pointer;
-  ${space}
-  ${color}
-  ${typography}
-  ${layout}
-  ${shadow}
   transition: transform 0.1s ease, box-shadow 0.1s ease;
 
   &:hover:not(:disabled) {

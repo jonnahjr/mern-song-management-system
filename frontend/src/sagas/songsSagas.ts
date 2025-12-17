@@ -31,7 +31,7 @@ function* fetchSongsSaga() {
 }
 
 // Add song saga
-function* addSongSaga(action: PayloadAction<SongFormData>) {
+function* addSongSaga(action) {
   try {
     const song: Song = yield call([apiService, apiService.createSong], action.payload);
     yield put(addSongSuccess(song));
@@ -43,7 +43,7 @@ function* addSongSaga(action: PayloadAction<SongFormData>) {
 }
 
 // Update song saga
-function* updateSongSaga(action: PayloadAction<{ id: string; data: SongFormData }>) {
+function* updateSongSaga(action) {
   try {
     const song: Song = yield call([apiService, apiService.updateSong], action.payload.id, action.payload.data);
     yield put(updateSongSuccess(song));
@@ -55,7 +55,7 @@ function* updateSongSaga(action: PayloadAction<{ id: string; data: SongFormData 
 }
 
 // Delete song saga
-function* deleteSongSaga(action: PayloadAction<string>) {
+function* deleteSongSaga(action) {
   try {
     yield call([apiService, apiService.deleteSong], action.payload);
     yield put(deleteSongSuccess(action.payload));
