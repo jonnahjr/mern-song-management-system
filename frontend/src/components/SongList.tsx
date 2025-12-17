@@ -3,6 +3,19 @@ import styled from '@emotion/styled';
 import { fetchSongsStart, setSelectedSong, deleteSongStart, setSearch, setSelectedGenre, setSelectedArtist, setSelectedSort } from '../redux/slices/songsSlice';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 
+const genreColors: { [key: string]: string } = {
+  'Pop': '#ff6b6b',
+  'Rock': '#4ecdc4',
+  'Hip Hop': '#45b7d1',
+  'Jazz': '#f9ca24',
+  'Classical': '#6c5ce7',
+  'Latin': '#fd79a8',
+  'Country': '#00b894',
+  'Electronic': '#a29bfe',
+  'Reggae': '#fdcb6e',
+  'Blues': '#e17055',
+};
+
 const SongList: React.FC = () => {
   const dispatch = useAppDispatch();
   const { songs, loading, error, search, selectedGenre, selectedArtist, selectedSort } = useAppSelector((state) => state.songs);
@@ -120,7 +133,7 @@ const SongList: React.FC = () => {
       ) : (
         <SongGrid>
           {songs.map((song) => (
-            <SongCard key={song._id}>
+            <SongCard key={song._id} genreColor={genreColors[song.genre]}>
               <SongTitle>{song.title}</SongTitle>
               <SongDetail>Artist: {song.artist}</SongDetail>
               <SongDetail>Album: {song.album}</SongDetail>
@@ -293,11 +306,15 @@ const SongGrid = styled.div`
   }
 `;
 
-const SongCard = styled.div`
+const SongCard = styled.div<{ genreColor?: string }>`
   border: 1px solid ${({ theme }) => (theme.mode === 'dark' ? '#374151' : '#ddd')};
   border-radius: 8px;
   padding: 16px;
-  background-color: ${({ theme }) => (theme.mode === 'dark' ? '#111827' : '#fff')};
+  background: ${({ genreColor, theme }) =>
+    genreColor
+      ? `linear-gradient(135deg, ${genreColor}20, ${theme.mode === 'dark' ? '#111827' : '#fff'})`
+      : theme.mode === 'dark' ? '#111827' : '#fff'
+  };
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 

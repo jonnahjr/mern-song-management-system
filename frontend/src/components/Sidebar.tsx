@@ -33,20 +33,7 @@ const Sidebar: React.FC<SidebarProps> = ({ activeSection, setActiveSection, isOp
         >
           📊 Statistics
         </MenuItem>
-        <MenuItem
-          active={activeSection === 'profile'}
-          onClick={() => handleMenuClick('profile')}
-        >
-          👤 Profile
-        </MenuItem>
       </Menu>
-      <ProfileSection>
-        <Avatar>🧑</Avatar>
-        <UserInfo>
-          <UserName>Admin User</UserName>
-          <UserRole>Manager</UserRole>
-        </UserInfo>
-      </ProfileSection>
     </SidebarContainer>
   );
 };
@@ -109,38 +96,6 @@ const CloseButton = styled.button`
   @media (min-width: 769px) {
     display: none;
   }
-`;
-
-const ProfileSection = styled.div`
-  position: absolute;
-  bottom: 20px;
-  left: 20px;
-  right: 20px;
-  display: flex;
-  align-items: center;
-`;
-
-const Avatar = styled.div`
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  background: rgba(25, 118, 210, 0.2);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 20px;
-  margin-right: 10px;
-`;
-
-const UserInfo = styled.div``;
-
-const UserName = styled.div`
-  font-weight: bold;
-`;
-
-const UserRole = styled.div`
-  font-size: 12px;
-  opacity: 0.7;
 `;
 
 export default Sidebar;

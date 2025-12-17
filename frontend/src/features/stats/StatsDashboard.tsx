@@ -86,7 +86,7 @@ const StatsDashboard: React.FC = () => {
   return (
     <Container>
       <HeaderSection>
-        <Title>📊 Real-Time Statistics Dashboard</Title>
+        <Title>📊 Statistics Dashboard</Title>
         <RefreshSection>
           <RefreshButton onClick={handleRefresh} disabled={loading}>
             🔄 {loading ? 'Updating...' : 'Refresh'}
