@@ -33,6 +33,16 @@ export interface Stats {
     createdAt: string;
   }[];
   topGenres: { genre: string; count: number }[];
+  top5Genres: { genre: string; count: number }[];
+  mostProductiveArtist: { artist: string; songCount: number } | null;
+  averageSongsPerAlbum: number;
+  artistAlbumSongTree: {
+    artist: string;
+    albums: {
+      album: string;
+      songs: { title: string; genre: string; createdAt: string }[];
+    }[];
+  }[];
 }
 
 export interface ApiResponse<T> {

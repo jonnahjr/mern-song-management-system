@@ -14,9 +14,28 @@ export const createSong = async (payload: SongPayload): Promise<ISong> => {
   return song.save();
 };
 
-export const listSongs = async (genre?: string): Promise<ISong[]> => {
-  const filter = genre ? { genre } : {};
-  return Song.find(filter).sort({ createdAt: -1 });
+export const listSongs = async (genre?: string, search?: string, artist?: string, sort?: string): Promise<ISong[]> => {
+  const filter: any = {};
+  if (genre) {
+    filter.genre = genre;
+  }
+  if (artist) {
+    filter.artist = artist;
+  }
+  if (search) {
+    filter.$or = [
+      { title: { $regex: search, $options: 'i' } },
+      { artist: { $regex: search, $options: 'i' } },
+      { album: { $regex: search, $options: 'i' } },
+      { genre: { $regex: search, $options: 'i' } },
+    ];
+  }
+  let sortOption: any = { createdAt: -1 };
+  if (sort) {
+    const [field, order] = sort.split(':');
+    sortOption = { [field]: order === 'desc' ? -1 : 1 };
+  }
+  return Song.find(filter).sort(sortOption);
 };
 
 export const findSongById = async (id: string): Promise<ISong> => {
@@ -70,6 +89,18 @@ export interface SongStats {
   songsPerAlbum: { album: string; count: number }[];
   latestSongs: { title: string; artist: string; album: string; genre: string; createdAt: Date }[];
   topGenres: { genre: string; count: number }[];
+  // Advanced statistics
+  top5Genres: { genre: string; count: number }[];
+  mostProductiveArtist: { artist: string; songCount: number } | null;
+  averageSongsPerAlbum: number;
+  // Hierarchical view: artist -> albums -> songs
+  artistAlbumSongTree: {
+    artist: string;
+    albums: {
+      album: string;
+      songs: { title: string; genre: string; createdAt: Date }[];
+    }[];
+  }[];
 }
 
 export const computeStats = async (): Promise<SongStats> => {
@@ -174,6 +205,43 @@ export const computeStats = async (): Promise<SongStats> => {
             },
           },
         ],
+        // Hierarchical artist -> albums -> songs
+        artistAlbumSongTree: [
+          {
+            $group: {
+              _id: {
+                artist: '$artist',
+                album: '$album',
+              },
+              songs: {
+                $push: {
+                  title: '$title',
+                  genre: '$genre',
+                  createdAt: '$createdAt',
+                },
+              },
+            },
+          },
+          {
+            $group: {
+              _id: '$_id.artist',
+              albums: {
+                $push: {
+                  album: '$_id.album',
+                  songs: '$songs',
+                },
+              },
+            },
+          },
+          {
+            $project: {
+              _id: 0,
+              artist: '$_id',
+              albums: 1,
+            },
+          },
+          { $sort: { artist: 1 } },
+        ],
       },
     },
     {
@@ -188,6 +256,30 @@ export const computeStats = async (): Promise<SongStats> => {
         songsPerAlbum: 1,
         latestSongs: 1,
         topGenres: { $slice: ['$songsPerGenre', 3] },
+        top5Genres: { $slice: ['$songsPerGenre', 5] },
+        mostProductiveArtist: {
+          $cond: [
+            { $gt: [{ $size: '$songsPerArtist' }, 0] },
+            {
+              artist: { $arrayElemAt: ['$songsPerArtist.artist', 0] },
+              songCount: { $arrayElemAt: ['$songsPerArtist.count', 0] },
+            },
+            null,
+          ],
+        },
+        averageSongsPerAlbum: {
+          $cond: [
+            { $gt: [{ $arrayElemAt: ['$totalCounts.totalAlbums', 0] }, 0] },
+            {
+              $divide: [
+                { $arrayElemAt: ['$totalCounts.totalSongs', 0] },
+                { $arrayElemAt: ['$totalCounts.totalAlbums', 0] },
+              ],
+            },
+            0,
+          ],
+        },
+        artistAlbumSongTree: 1,
       },
     },
   ]);
@@ -203,6 +295,10 @@ export const computeStats = async (): Promise<SongStats> => {
     songsPerAlbum: [],
     latestSongs: [],
     topGenres: [],
+    top5Genres: [],
+    mostProductiveArtist: null,
+    averageSongsPerAlbum: 0,
+    artistAlbumSongTree: [],
   };
 
   return stats[0] ?? empty;

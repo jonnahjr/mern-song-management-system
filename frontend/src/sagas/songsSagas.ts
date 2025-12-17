@@ -1,4 +1,4 @@
-import { takeEvery, call, put } from 'redux-saga/effects';
+import { takeEvery, call, put, select } from 'redux-saga/effects';
 import type { PayloadAction } from '@reduxjs/toolkit';
 import { apiService } from '../services/api';
 import type { Song, SongFormData } from '../types';
@@ -21,7 +21,8 @@ import { fetchStatsStart } from '../redux/slices/statsSlice';
 // Fetch songs saga
 function* fetchSongsSaga() {
   try {
-    const songs: Song[] = yield call([apiService, apiService.getSongs]);
+    const { search, selectedGenre, selectedArtist, selectedSort }: { search: string; selectedGenre: string; selectedArtist: string; selectedSort: string } = yield select((state: any) => state.songs);
+    const songs: Song[] = yield call([apiService, apiService.getSongs], search, selectedGenre, selectedArtist, selectedSort);
     yield put(fetchSongsSuccess(songs));
   } catch (error: unknown) {
     const message = error instanceof Error ? error.message : 'Failed to fetch songs';

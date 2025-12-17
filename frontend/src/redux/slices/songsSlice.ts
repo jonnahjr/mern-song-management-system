@@ -7,6 +7,10 @@ interface SongsState {
   loading: boolean;
   error: string | null;
   selectedSong: Song | null;
+  search: string;
+  selectedGenre: string;
+  selectedArtist: string;
+  selectedSort: string;
 }
 
 const initialState: SongsState = {
@@ -14,6 +18,10 @@ const initialState: SongsState = {
   loading: false,
   error: null,
   selectedSong: null,
+  search: '',
+  selectedGenre: '',
+  selectedArtist: '',
+  selectedSort: 'createdAt:desc',
 };
 
 const songsSlice = createSlice({
@@ -84,6 +92,26 @@ const songsSlice = createSlice({
       state.selectedSong = action.payload;
     },
 
+    // Set search
+    setSearch: (state, action: PayloadAction<string>) => {
+      state.search = action.payload;
+    },
+
+    // Set selected genre
+    setSelectedGenre: (state, action: PayloadAction<string>) => {
+      state.selectedGenre = action.payload;
+    },
+
+    // Set selected artist
+    setSelectedArtist: (state, action: PayloadAction<string>) => {
+      state.selectedArtist = action.payload;
+    },
+
+    // Set selected sort
+    setSelectedSort: (state, action: PayloadAction<string>) => {
+      state.selectedSort = action.payload;
+    },
+
     // Clear error
     clearError: (state) => {
       state.error = null;
@@ -105,6 +133,10 @@ export const {
   deleteSongSuccess,
   deleteSongFailure,
   setSelectedSong,
+  setSearch,
+  setSelectedGenre,
+  setSelectedArtist,
+  setSelectedSort,
   clearError,
 } = songsSlice.actions;
 

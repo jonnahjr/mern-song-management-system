@@ -20,8 +20,8 @@ export const createSong = async (req: Request, res: Response, next: NextFunction
 // Get all songs
 export const getSongs = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
-    const { genre } = req.query as { genre?: string };
-    const songs = await listSongs(genre);
+    const { genre, search, artist, sort } = req.query as { genre?: string; search?: string; artist?: string; sort?: string };
+    const songs = await listSongs(genre, search, artist, sort);
     res.status(200).json(songs);
   } catch (error) {
     next(error);

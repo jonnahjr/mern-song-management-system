@@ -134,15 +134,15 @@ const FormContainer = styled.div`
   max-width: 500px;
   margin: 0 auto;
   padding: 20px;
-  border: 1px solid #ddd;
+  border: 1px solid ${({ theme }) => (theme.mode === 'dark' ? '#374151' : '#ddd')};
   border-radius: 8px;
-  background-color: #fff;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  background-color: ${({ theme }) => (theme.mode === 'dark' ? '#111827' : '#fff')};
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
 `;
 
 const FormTitle = styled.h3`
   margin-bottom: 20px;
-  color: #333;
+  color: ${({ theme }) => (theme.mode === 'dark' ? '#e5e7eb' : '#333')};
   text-align: center;
 `;
 
@@ -159,13 +159,13 @@ const Label = styled.label`
   display: block;
   margin-bottom: 4px;
   font-weight: bold;
-  color: #333;
+  color: ${({ theme }) => (theme.mode === 'dark' ? '#e5e7eb' : '#333')};
 `;
 
 const Input = styled.input`
   width: 100%;
   padding: 8px 12px;
-  border: 1px solid #ccc;
+  border: 1px solid ${({ theme }) => (theme.mode === 'dark' ? '#4b5563' : '#ccc')};
   border-radius: 4px;
   font-size: 16px;
 
