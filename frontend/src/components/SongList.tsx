@@ -281,13 +281,15 @@ const EmptyMessage = styled.div`
 `;
 
 const SongGrid = styled.div`
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  display: flex;
+  flex-wrap: wrap;
   gap: 20px;
+  overflow-x: auto;
+  padding-bottom: 10px;
 
   @media (max-width: 768px) {
-    grid-template-columns: 1fr;
-    gap: 16px;
+    flex-direction: column;
+    overflow-x: visible;
   }
 `;
 
