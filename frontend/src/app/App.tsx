@@ -12,6 +12,7 @@ const App: React.FC = () => {
   const theme = useAppSelector((state) => state.theme);
   const dispatch = useAppDispatch();
   const [activeSection, setActiveSection] = useState('songs');
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const background = theme.mode === 'dark'
     ? 'linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%)'
@@ -48,9 +49,17 @@ const App: React.FC = () => {
 
   return (
     <AppContainer style={{ background }}>
-      <Sidebar activeSection={activeSection} setActiveSection={setActiveSection} />
-      <MainContent>
+      <Sidebar
+        activeSection={activeSection}
+        setActiveSection={setActiveSection}
+        isOpen={sidebarOpen}
+        setIsOpen={setSidebarOpen}
+      />
+      <MainContent marginLeft={sidebarOpen ? '250px' : '0'}>
         <AppHeader>
+          <HamburgerButton onClick={() => setSidebarOpen(!sidebarOpen)}>
+            ☰
+          </HamburgerButton>
           <HeaderTitle>🎵 MERN Song Management System</HeaderTitle>
           <HeaderSubtitle>Addis Software Test Project</HeaderSubtitle>
           <ToggleButton onClick={() => dispatch(toggleTheme())}>
@@ -71,11 +80,11 @@ const AppContainer = styled.div`
   position: relative;
 `;
 
-const MainContent = styled.div`
-  margin-left: 250px;
+const MainContent = styled.div<{ marginLeft: string }>`
+  margin-left: ${props => props.marginLeft};
 
-  @media (max-width: 768px) {
-    margin-left: 200px;
+  @media (min-width: 769px) {
+    margin-left: 250px;
   }
 `;
 
@@ -159,6 +168,29 @@ const CardTitle = styled.h2`
 
   @media (max-width: 768px) {
     font-size: 20px;
+  }
+`;
+
+const HamburgerButton = styled.button`
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  background: rgba(255, 255, 255, 0.2);
+  border: none;
+  border-radius: 4px;
+  width: 40px;
+  height: 40px;
+  font-size: 20px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+  z-index: 1001;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.3);
+  }
+
+  @media (min-width: 769px) {
+    display: none;
   }
 `;
 

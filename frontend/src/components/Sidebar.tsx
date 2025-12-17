@@ -4,28 +4,38 @@ import styled from '@emotion/styled';
 interface SidebarProps {
   activeSection: string;
   setActiveSection: (section: string) => void;
+  isOpen: boolean;
+  setIsOpen: (isOpen: boolean) => void;
 }
 
-const Sidebar: React.FC<SidebarProps> = ({ activeSection, setActiveSection }) => {
+const Sidebar: React.FC<SidebarProps> = ({ activeSection, setActiveSection, isOpen, setIsOpen }) => {
+  const handleMenuClick = (section: string) => {
+    setActiveSection(section);
+    if (window.innerWidth <= 768) {
+      setIsOpen(false);
+    }
+  };
+
   return (
-    <SidebarContainer>
+    <SidebarContainer isOpen={isOpen}>
+      <CloseButton onClick={() => setIsOpen(false)}>×</CloseButton>
       <Logo>🎵 Song Manager</Logo>
       <Menu>
         <MenuItem
           active={activeSection === 'songs'}
-          onClick={() => setActiveSection('songs')}
+          onClick={() => handleMenuClick('songs')}
         >
           🎶 Songs
         </MenuItem>
         <MenuItem
           active={activeSection === 'stats'}
-          onClick={() => setActiveSection('stats')}
+          onClick={() => handleMenuClick('stats')}
         >
           📊 Statistics
         </MenuItem>
         <MenuItem
           active={activeSection === 'profile'}
-          onClick={() => setActiveSection('profile')}
+          onClick={() => handleMenuClick('profile')}
         >
           👤 Profile
         </MenuItem>
@@ -41,7 +51,7 @@ const Sidebar: React.FC<SidebarProps> = ({ activeSection, setActiveSection }) =>
   );
 };
 
-const SidebarContainer = styled.div`
+const SidebarContainer = styled.div<{ isOpen: boolean }>`
   width: 250px;
   height: 100vh;
   background: rgba(30, 30, 30, 0.95);
@@ -49,12 +59,19 @@ const SidebarContainer = styled.div`
   color: white;
   padding: 20px;
   position: fixed;
-  left: 0;
+  left: ${props => props.isOpen ? '0' : '-250px'};
   top: 0;
   box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+  transition: left 0.3s ease;
+  z-index: 1000;
 
   @media (max-width: 768px) {
     width: 200px;
+    left: ${props => props.isOpen ? '0' : '-200px'};
+  }
+
+  @media (min-width: 769px) {
+    left: 0;
   }
 `;
 
@@ -80,6 +97,21 @@ const MenuItem = styled.li<{ active: boolean }>`
 
   &:hover {
     background: rgba(25, 118, 210, 0.1);
+  }
+`;
+
+const CloseButton = styled.button`
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: none;
+  border: none;
+  color: white;
+  font-size: 24px;
+  cursor: pointer;
+
+  @media (min-width: 769px) {
+    display: none;
   }
 `;
 
