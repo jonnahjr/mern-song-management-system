@@ -2,7 +2,9 @@ import axios from 'axios';
 import type { AxiosInstance, AxiosResponse } from 'axios';
 import type { Song, SongFormData, Stats } from '../types';
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000';
+// Single source of truth for backend URL.
+// In production, Vercel must define VITE_API_BASE_URL (e.g. https://mern-song-management-system.onrender.com).
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL as string;
 
 class ApiService {
   private api: AxiosInstance;
