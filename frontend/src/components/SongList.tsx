@@ -272,13 +272,6 @@ const Select = styled.select`
   }
 `;
 
-const LoadingContainer = styled.div`
-  text-align: center;
-  padding: 40px;
-  font-size: 18px;
-  color: ${({ theme }) => (theme.mode === 'dark' ? '#9ca3af' : '#666')};
-`;
-
 const ErrorContainer = styled.div`
   text-align: center;
   padding: 40px;
