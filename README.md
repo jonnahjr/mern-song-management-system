@@ -4,17 +4,17 @@ Full‑stack MERN app for managing songs (CRUD + statistics) with a Dockerized E
 
 ### Screenshots
 
-#### Light Mode
-![Light Mode](screenshots/light-mode.png)
+#### 1. Main Dashboard
+![Main Dashboard](screenshots/1.png)
 
-#### Dark Mode
-![Dark Mode](screenshots/dark-mode.png)
+#### 2. Song Management
+![Song Management](screenshots/2.png)
 
-#### Mobile View
-![Mobile View](screenshots/mobile-view.png)
+#### 3. Statistics Overview
+![Statistics Overview](screenshots/3.png)
 
-#### Stats Dashboard
-![Stats Dashboard](screenshots/stats-dashboard.png)
+#### 4. Mobile Responsive Design
+![Mobile Responsive Design](screenshots/4.png)
 
 ### Architecture Overview
 
