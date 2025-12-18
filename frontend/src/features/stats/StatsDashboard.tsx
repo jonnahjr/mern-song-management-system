@@ -3,18 +3,6 @@ import styled from '@emotion/styled';
 import { fetchStatsStart } from '../../redux/slices/statsSlice';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 
-const genreColors: { [key: string]: string } = {
-  'Pop': '#ff6b6b',
-  'Rock': '#4ecdc4',
-  'Hip Hop': '#45b7d1',
-  'Jazz': '#f9ca24',
-  'Classical': '#6c5ce7',
-  'Latin': '#fd79a8',
-  'Country': '#00b894',
-  'Electronic': '#a29bfe',
-  'Reggae': '#fdcb6e',
-  'Blues': '#e17055',
-};
 
 const AnimatedCounter: React.FC<{ value: number; duration?: number }> = ({ value, duration = 1000 }) => {
   const [displayValue, setDisplayValue] = useState(0);
