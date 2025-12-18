@@ -16,6 +16,8 @@ app.use(
     origin: [
       "http://localhost:5173",
       "https://mern-song-management-system.vercel.app",
+      "https://mern-song-management-system-ffsvmbqk8-yonas-bogales-projects.vercel.app",
+      "https://mern-song-management-system-hybs744ra-yonas-bogales-projects.vercel.app",
     ],
     credentials: true,
   })
