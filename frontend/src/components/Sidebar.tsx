@@ -31,7 +31,7 @@ const Sidebar: React.FC<SidebarProps> = ({ activeSection, setActiveSection, isOp
           active={activeSection === 'stats'}
           onClick={() => handleMenuClick('stats')}
         >
-          📊 Statistics
+          📊 Insights
         </MenuItem>
       </Menu>
     </SidebarContainer>

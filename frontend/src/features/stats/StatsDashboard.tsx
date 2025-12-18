@@ -87,7 +87,7 @@ const StatsDashboard: React.FC = () => {
   return (
     <Container>
       <HeaderSection>
-        <Title>📊 Insights Dashboard</Title>
+        <Title>📊 Dashboard</Title>
         <RefreshSection>
           <RefreshButton onClick={handleRefresh} disabled={loading}>
             🔄 {loading ? 'Updating...' : 'Refresh'}
@@ -230,7 +230,7 @@ const StatsDashboard: React.FC = () => {
         ))}
       </ListContainer>
 
-      <SectionTitle>All</SectionTitle>
+      <SectionTitle>📚 Song Library</SectionTitle>
       <HierarchyList>
         {stats.artistAlbumSongTree.map((artistNode) => (
           <HierarchyArtist key={artistNode.artist}>
