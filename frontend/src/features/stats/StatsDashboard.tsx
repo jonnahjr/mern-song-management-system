@@ -4,6 +4,19 @@ import { fetchStatsStart } from '../../redux/slices/statsSlice';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 
 
+const genreColors: { [key: string]: string } = {
+  'Pop': '#ff6b6b',
+  'Rock': '#4ecdc4',
+  'Hip Hop': '#45b7d1',
+  'Jazz': '#f9ca24',
+  'Classical': '#6c5ce7',
+  'Latin': '#fd79a8',
+  'Country': '#00b894',
+  'Electronic': '#a29bfe',
+  'Reggae': '#fdcb6e',
+  'Blues': '#e17055',
+};
+
 const AnimatedCounter: React.FC<{ value: number; duration?: number }> = ({ value, duration = 1000 }) => {
   const [displayValue, setDisplayValue] = useState(0);
 
@@ -29,6 +42,7 @@ const StatsDashboard: React.FC = () => {
 
   const [mode, setMode] = useState<'genre' | 'artist'>('genre');
   const [lastUpdated, setLastUpdated] = useState<Date>(new Date());
+  const [expandedArtists, setExpandedArtists] = useState<Set<string>>(new Set());
 
   const maxGenreCount = useMemo(
     () => {
@@ -60,10 +74,20 @@ const StatsDashboard: React.FC = () => {
     setLastUpdated(new Date());
   };
 
+  const toggleArtist = (artist: string) => {
+    const newExpanded = new Set(expandedArtists);
+    if (newExpanded.has(artist)) {
+      newExpanded.delete(artist);
+    } else {
+      newExpanded.add(artist);
+    }
+    setExpandedArtists(newExpanded);
+  };
+
   return (
     <Container>
       <HeaderSection>
-        <Title>📊 Dashboard</Title>
+        <Title>📊 Insights Dashboard</Title>
         <RefreshSection>
           <RefreshButton onClick={handleRefresh} disabled={loading}>
             🔄 {loading ? 'Updating...' : 'Refresh'}
@@ -205,6 +229,38 @@ const StatsDashboard: React.FC = () => {
           </ListItem>
         ))}
       </ListContainer>
+
+      <SectionTitle>All</SectionTitle>
+      <HierarchyList>
+        {stats.artistAlbumSongTree.map((artistNode) => (
+          <HierarchyArtist key={artistNode.artist}>
+            <ArtistHeader onClick={() => toggleArtist(artistNode.artist)}>
+              <ArtistIcon>🎤</ArtistIcon>
+              <ArtistName>{artistNode.artist}</ArtistName>
+              <ExpandIcon>{expandedArtists.has(artistNode.artist) ? '▼' : '▶'}</ExpandIcon>
+            </ArtistHeader>
+            {expandedArtists.has(artistNode.artist) && (
+              <HierarchyAlbumList>
+                {artistNode.albums.map((albumNode) => (
+                  <AlbumItem key={albumNode.album}>
+                    <AlbumHeader>
+                      <AlbumIcon>💿</AlbumIcon>
+                      <AlbumTitle>{albumNode.album}</AlbumTitle>
+                    </AlbumHeader>
+                    <SongBadges>
+                      {albumNode.songs.map((song) => (
+                        <SongBadge key={`${song.title}-${song.createdAt}`} color={genreColors[song.genre] || '#888'}>
+                          🎵 {song.title}
+                        </SongBadge>
+                      ))}
+                    </SongBadges>
+                  </AlbumItem>
+                ))}
+              </HierarchyAlbumList>
+            )}
+          </HierarchyArtist>
+        ))}
+      </HierarchyList>
     </Container>
   );
 };
@@ -408,6 +464,106 @@ const ListItem = styled.li`
 
   span:last-of-type {
     color: ${({ theme }) => (theme.mode === 'dark' ? '#9ca3af' : '#666')};
+  }
+`;
+
+const HierarchyList = styled.ul`
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+`;
+
+const HierarchyArtist = styled.li`
+  border-radius: 12px;
+  border: 2px solid ${({ theme }) => (theme.mode === 'dark' ? '#374151' : '#e5e7eb')};
+  background: ${({ theme }) => (theme.mode === 'dark' ? '#111827' : '#ffffff')};
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+`;
+
+const ArtistHeader = styled.div`
+  padding: 16px 20px;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  color: white;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  transition: background 0.3s ease;
+
+  &:hover {
+    background: linear-gradient(135deg, #5a6fd8, #6a4190);
+  }
+`;
+
+const ArtistIcon = styled.span`
+  font-size: 20px;
+  margin-right: 12px;
+`;
+
+const ArtistName = styled.strong`
+  flex: 1;
+  font-size: 18px;
+`;
+
+const ExpandIcon = styled.span`
+  font-size: 16px;
+  transition: transform 0.3s ease;
+`;
+
+const HierarchyAlbumList = styled.ul`
+  list-style: none;
+  padding: 16px 20px;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+`;
+
+const AlbumItem = styled.li`
+  border: 1px solid ${({ theme }) => (theme.mode === 'dark' ? '#4b5563' : '#d1d5db')};
+  border-radius: 8px;
+  padding: 12px;
+  background: ${({ theme }) => (theme.mode === 'dark' ? '#1f2937' : '#f9fafb')};
+`;
+
+const AlbumHeader = styled.div`
+  display: flex;
+  align-items: center;
+  margin-bottom: 8px;
+`;
+
+const AlbumIcon = styled.span`
+  font-size: 18px;
+  margin-right: 8px;
+`;
+
+const AlbumTitle = styled.div`
+  font-weight: 600;
+  font-size: 16px;
+  color: ${({ theme }) => (theme.mode === 'dark' ? '#e5e7eb' : '#111827')};
+`;
+
+const SongBadges = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+`;
+
+const SongBadge = styled.span<{ color: string }>`
+  padding: 4px 12px;
+  border-radius: 20px;
+  background: ${props => props.color};
+  color: white;
+  font-size: 12px;
+  font-weight: 500;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease;
+
+  &:hover {
+    transform: scale(1.05);
   }
 `;
 
